@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:regina_portfolio/contact/contact_provider.dart';
 import 'package:regina_portfolio/contact/contact_section.dart';
 import 'package:regina_portfolio/profile/profile_section.dart';
 import 'package:regina_portfolio/project/project_section.dart';
+import 'package:regina_portfolio/utils/colors.dart';
 import 'package:regina_portfolio/utils/enums.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -28,7 +30,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Regina Portfolio',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(scaffoldBackgroundColor: const Color(0xff141313)),
+        theme: ThemeData(textTheme: GoogleFonts.montserratTextTheme()),
         home: const PortfolioHome(),
         builder: (context, child) => ResponsiveBreakpoints.builder(
           child: child!,
@@ -58,6 +60,7 @@ class _PortfolioHomeState extends State<PortfolioHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.surfaceA0,
       body: Column(
         children: [
           Expanded(
@@ -91,7 +94,10 @@ class _PortfolioHomeState extends State<PortfolioHome> {
               alignment: Alignment.bottomCenter,
               child: Text(
                 '© 2025 Regina Ragnarsdottir.',
-                style: TextStyle(fontSize: 12, color: Color(0xffE0E0E0)),
+                style: TextStyle(
+                  fontSize: 12,
+                  color: AppColors.tonalSurfaceA50,
+                ),
               ),
             ),
           ),

@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:regina_portfolio/utils/colors.dart';
+import 'package:regina_portfolio/utils/extensions.dart';
 import 'package:regina_portfolio/utils/local_data.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -10,13 +12,11 @@ class ProjectTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobileOrTablet =
-        ResponsiveBreakpoints.of(context).isMobile ||
-        ResponsiveBreakpoints.of(context).isTablet;
-
     return MaxWidthBox(
       maxWidth: 1200,
-      padding: EdgeInsets.symmetric(horizontal: isMobileOrTablet ? 16.0 : 32.0),
+      padding: EdgeInsets.symmetric(
+        horizontal: context.isMobileOrTablet ? 16.0 : 32.0,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -24,10 +24,12 @@ class ProjectTab extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: isMobileOrTablet ? 1 : 2,
+              crossAxisCount: context.isMobileOrTablet ? 1 : 2,
               crossAxisSpacing: 16,
               mainAxisSpacing: 16,
-              childAspectRatio: 2.4,
+              childAspectRatio: ResponsiveBreakpoints.of(context).isMobile
+                  ? 1.6
+                  : 2.4,
             ),
             itemCount: localData.length,
             itemBuilder: (context, index) => _ProjectCard(
@@ -85,6 +87,7 @@ class _ProjectCardState extends State<_ProjectCard>
   @override
   Widget build(BuildContext context) {
     final Uri url = Uri.parse(localData[widget.index].projectUrl);
+
     return MouseRegion(
       onEnter: (_) {
         setState(() => _isHovered = true);
@@ -98,7 +101,6 @@ class _ProjectCardState extends State<_ProjectCard>
         mouseCursor: SystemMouseCursors.click,
         onTap: () async => await _launchUrl(url),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(12),
           child: Stack(
             children: [
               Align(
@@ -106,8 +108,8 @@ class _ProjectCardState extends State<_ProjectCard>
                 child: Text(
                   localData[widget.index].projectName,
                   style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
+                    color: AppColors.primaryA10,
+                    fontSize: context.isMobileOrTablet ? 20 : 24,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -115,7 +117,7 @@ class _ProjectCardState extends State<_ProjectCard>
               SlideTransition(
                 position: _animation,
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(4),
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
                     child: AnimatedContainer(
@@ -123,8 +125,7 @@ class _ProjectCardState extends State<_ProjectCard>
                       width: double.infinity,
                       height: double.infinity,
                       decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(12),
+                        color: AppColors.surfaceA0.withValues(alpha: 0.2),
                       ),
                     ),
                   ),
@@ -138,7 +139,7 @@ class _ProjectCardState extends State<_ProjectCard>
                     angle: -0.5,
                     child: const Icon(
                       Icons.arrow_forward,
-                      color: Colors.white,
+                      color: AppColors.primaryA10,
                       size: 36,
                     ),
                   ),
@@ -154,11 +155,11 @@ class _ProjectCardState extends State<_ProjectCard>
                 width: double.infinity,
                 height: double.infinity,
                 decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
                   border: Border.all(
-                    color: Colors.white,
-                    width: _isHovered ? 4 : 0,
+                    color: AppColors.tonalSurfaceA30,
+                    width: _isHovered ? 4 : 1,
                   ),
-                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
             ],
@@ -186,6 +187,7 @@ class ProjectHover extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(4)),
       width: double.infinity,
       height: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -193,14 +195,16 @@ class ProjectHover extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            projectName,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+          ResponsiveBreakpoints.of(context).isMobile
+              ? SizedBox.shrink()
+              : Text(
+                  projectName,
+                  style: TextStyle(
+                    color: AppColors.primaryA10,
+                    fontSize: context.isMobileOrTablet ? 14 : 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
           Wrap(
             spacing: 8,
             runSpacing: 4,
@@ -208,13 +212,16 @@ class ProjectHover extends StatelessWidget {
                 .map(
                   (tag) => Chip(
                     padding: EdgeInsets.all(2),
-                    backgroundColor: Colors.white,
-                    side: BorderSide(color: Colors.transparent),
+                    backgroundColor: AppColors.primaryA10,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    side: BorderSide(color: AppColors.transparent),
                     elevation: 2,
                     label: Text(
                       tag,
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: context.isMobileOrTablet ? 14 : 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
