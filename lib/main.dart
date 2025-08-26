@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
-import 'package:regina_portfolio/contact_provider.dart';
-import 'package:regina_portfolio/contact_section.dart';
-import 'package:regina_portfolio/enums.dart';
-import 'package:regina_portfolio/profile_section.dart';
-import 'package:regina_portfolio/project_section.dart';
+import 'package:regina_portfolio/contact/contact_provider.dart';
+import 'package:regina_portfolio/contact/contact_section.dart';
+import 'package:regina_portfolio/profile/profile_section.dart';
+import 'package:regina_portfolio/project/project_section.dart';
+import 'package:regina_portfolio/utils/enums.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 void main() async {
@@ -29,8 +29,9 @@ class MyApp extends StatelessWidget {
         title: 'Regina Portfolio',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(scaffoldBackgroundColor: const Color(0xff141313)),
+        home: const PortfolioHome(),
         builder: (context, child) => ResponsiveBreakpoints.builder(
-          child: PortfolioHome(),
+          child: child!,
           breakpoints: [
             const Breakpoint(start: 0, end: 450, name: MOBILE),
             const Breakpoint(start: 451, end: 800, name: TABLET),
@@ -57,7 +58,6 @@ class _PortfolioHomeState extends State<PortfolioHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
       body: Column(
         children: [
           Expanded(
@@ -86,19 +86,12 @@ class _PortfolioHomeState extends State<PortfolioHome> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 32.0,
-              vertical: 16.0,
-            ),
+            padding: EdgeInsets.symmetric(vertical: 24.0),
             child: Align(
-              alignment: Alignment.bottomLeft,
-              child: Row(
-                children: [
-                  Text(
-                    '© 2025 Regina Ragnarsdottir.',
-                    style: TextStyle(fontSize: 12, color: Color(0xffE0E0E0)),
-                  ),
-                ],
+              alignment: Alignment.bottomCenter,
+              child: Text(
+                '© 2025 Regina Ragnarsdottir.',
+                style: TextStyle(fontSize: 12, color: Color(0xffE0E0E0)),
               ),
             ),
           ),

@@ -1,8 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:regina_portfolio/contact_provider.dart';
-import 'package:regina_portfolio/contact_validators.dart';
+import 'package:regina_portfolio/contact/contact_provider.dart';
+import 'package:regina_portfolio/contact/contact_validators.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -19,33 +19,31 @@ class ContactTab extends StatelessWidget {
 
     return MaxWidthBox(
       maxWidth: 1200,
-      child: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: ResponsiveRowColumn(
-          layout: isMobileOrTablet
-              ? ResponsiveRowColumnType.COLUMN
-              : ResponsiveRowColumnType.ROW,
-          columnMainAxisSize: MainAxisSize.max,
-          rowMainAxisSize: MainAxisSize.max,
-          children: [
-            ResponsiveRowColumnItem(
-              child: isMobileOrTablet
-                  ? _ContactInfo()
-                  : Flexible(child: _ContactInfo()),
+      padding: EdgeInsets.symmetric(horizontal: isMobileOrTablet ? 18.0 : 32.0),
+      child: ResponsiveRowColumn(
+        layout: isMobileOrTablet
+            ? ResponsiveRowColumnType.COLUMN
+            : ResponsiveRowColumnType.ROW,
+        columnMainAxisSize: MainAxisSize.max,
+        rowMainAxisSize: MainAxisSize.max,
+        children: [
+          ResponsiveRowColumnItem(
+            child: isMobileOrTablet
+                ? _ContactInfo()
+                : Flexible(child: _ContactInfo()),
+          ),
+          ResponsiveRowColumnItem(
+            child: SizedBox(
+              width: isMobileOrTablet ? 0 : spacing,
+              height: isMobileOrTablet ? spacing : 0,
             ),
-            ResponsiveRowColumnItem(
-              child: SizedBox(
-                width: isMobileOrTablet ? 0 : spacing,
-                height: isMobileOrTablet ? spacing : 0,
-              ),
-            ),
-            ResponsiveRowColumnItem(
-              child: isMobileOrTablet
-                  ? _ContactForm()
-                  : Flexible(child: _ContactForm()),
-            ),
-          ],
-        ),
+          ),
+          ResponsiveRowColumnItem(
+            child: isMobileOrTablet
+                ? _ContactForm()
+                : Flexible(child: _ContactForm()),
+          ),
+        ],
       ),
     );
   }
@@ -142,6 +140,7 @@ class _ContactFormState extends State<_ContactForm> {
               maxLines: 6,
               controller: _messageController,
               validator: (value) => ContactValidators.validateMessage(value),
+              textInputAction: TextInputAction.done,
             ),
             const SizedBox(height: 30),
             _ContactButton(
@@ -210,8 +209,11 @@ class _ContactButton extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.grey,
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+          padding: const EdgeInsets.all(16.0),
           disabledBackgroundColor: Colors.grey,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+          ),
         ),
         onPressed: onPressed,
         child: Padding(
@@ -223,7 +225,10 @@ class _ContactButton extends StatelessWidget {
                     SizedBox(
                       width: 20,
                       height: 20,
-                      child: CircularProgressIndicator(color: Colors.black),
+                      child: CircularProgressIndicator(
+                        color: Colors.black,
+                        strokeWidth: 2.4,
+                      ),
                     ),
                     SizedBox(width: 16),
                     Text(
@@ -232,9 +237,25 @@ class _ContactButton extends StatelessWidget {
                     ),
                   ],
                 )
-              : const Text(
-                  "Send Message",
-                  style: TextStyle(color: Colors.black, fontSize: 16),
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Send Message",
+                      style: TextStyle(color: Colors.black, fontSize: 16),
+                    ),
+                    Transform.translate(
+                      offset: const Offset(12, 0),
+                      child: Transform.rotate(
+                        angle: -0.5,
+                        child: const Icon(
+                          Icons.send,
+                          color: Colors.black,
+                          size: 24,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
         ),
       ),
@@ -249,6 +270,7 @@ class _ContactTextField extends StatelessWidget {
     required this.controller,
     this.maxLines = 1,
     this.validator,
+    this.textInputAction = TextInputAction.next,
   });
 
   final String label;
@@ -256,6 +278,7 @@ class _ContactTextField extends StatelessWidget {
   final TextEditingController controller;
   final int maxLines;
   final String? Function(String?)? validator;
+  final TextInputAction textInputAction;
 
   @override
   Widget build(BuildContext context) {
@@ -268,8 +291,15 @@ class _ContactTextField extends StatelessWidget {
           controller: controller,
           validator: validator,
           style: TextStyle(color: Colors.white),
+          autofocus: true,
+          cursorColor: Colors.white,
+          textInputAction: textInputAction,
           decoration: InputDecoration(
             hintText: hintText,
+            alignLabelWithHint: true,
+            contentPadding: const EdgeInsets.symmetric(vertical: 16.0),
+            prefix: const Padding(padding: EdgeInsets.only(left: 16.0)),
+            hintStyle: TextStyle(color: Colors.grey.shade700),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
