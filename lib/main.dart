@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+//TODO - Add microinteractions
 class PortfolioHome extends StatefulWidget {
   const PortfolioHome({super.key});
 
@@ -46,25 +47,49 @@ class _PortfolioHomeState extends State<PortfolioHome> {
       backgroundColor: Colors.black,
       body: Column(
         children: [
-          Align(
-            alignment: Alignment.centerRight,
-            child: Image.asset(
-              "assets/worldmap.png",
-              fit: BoxFit.contain,
-              opacity: const AlwaysStoppedAnimation(0.6),
+          Expanded(
+            child: ListView(
+              children: [
+                //TODO - Add Hi, my name is Regina?
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Image.asset(
+                    "assets/worldmap.png",
+                    fit: BoxFit.contain,
+                    opacity: const AlwaysStoppedAnimation(0.6),
+                  ),
+                ),
+                ProfileTab(
+                  tabs: TabItem.values,
+                  selectedTab: _selectedTab,
+                  onTabSelected: (tab) => setState(() => _selectedTab = tab),
+                ),
+                const SizedBox(height: 46),
+                switch (_selectedTab) {
+                  TabItem.profile => const ProfileTabView(),
+                  TabItem.projects => ProjectTab(),
+                  TabItem.contact => const ContactTab(),
+                },
+              ],
             ),
           ),
-          ProfileTab(
-            tabs: TabItem.values,
-            selectedTab: _selectedTab,
-            onTabSelected: (tab) => setState(() => _selectedTab = tab),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 32.0,
+              vertical: 16.0,
+            ),
+            child: Align(
+              alignment: Alignment.bottomLeft,
+              child: Row(
+                children: [
+                  Text(
+                    '© 2025 Regina. All rights reserved.',
+                    style: TextStyle(fontSize: 12, color: Color(0xffE0E0E0)),
+                  ),
+                ],
+              ),
+            ),
           ),
-          const SizedBox(height: 46),
-          switch (_selectedTab) {
-            TabItem.profile => const ProfileTabView(),
-            TabItem.projects => ProjectTab(),
-            TabItem.contact => const ContactTab(),
-          },
         ],
       ),
     );

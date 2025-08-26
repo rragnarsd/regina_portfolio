@@ -54,28 +54,24 @@ class _ContactInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Uri url = Uri.parse('https://www.linkedin.com/in/reginaragnarsd/');
-    return Center(
-      child: RichText(
-        textAlign: TextAlign.center,
-        text: TextSpan(
-          mouseCursor: SystemMouseCursors.precise,
-          text:
-              'For any project inquiry or for more\ninformation about what I do, please feel free\nto get in touch here or on ',
-          style: TextStyle(fontSize: 18, color: Colors.grey),
-          children: <TextSpan>[
-            TextSpan(
-              text: 'LinkedIn',
-              recognizer: TapGestureRecognizer()
-                ..onTap = () async {
-                  await _launchUrl(url);
-                },
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                decoration: TextDecoration.underline,
-              ),
+    return RichText(
+      textAlign: TextAlign.left,
+      text: TextSpan(
+        mouseCursor: SystemMouseCursors.precise,
+        text:
+            'For any project inquiry or for more\ninformation about what I do, please feel free\nto get in touch here or on ',
+        style: TextStyle(fontSize: 18, color: Colors.grey),
+        children: <TextSpan>[
+          TextSpan(
+            text: 'LinkedIn',
+            recognizer: TapGestureRecognizer()
+              ..onTap = () async => await _launchUrl(url),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              decoration: TextDecoration.underline,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -87,30 +83,56 @@ class _ContactInfo extends StatelessWidget {
   }
 }
 
-class _ContactForm extends StatelessWidget {
+class _ContactForm extends StatefulWidget {
   const _ContactForm();
 
   @override
+  State<StatefulWidget> createState() => _ContactFormState();
+}
+
+class _ContactFormState extends State<_ContactForm> {
+  //TODO - Add validation and send functionality
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _messageController = TextEditingController();
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _messageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final isMobileOrTablet =
+        ResponsiveBreakpoints.of(context).isMobile ||
+        ResponsiveBreakpoints.of(context).isTablet;
+
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey.shade800),
       ),
-      padding: const EdgeInsets.all(32.0),
-      child: Column(
-        children: [
-          _ContactTextField(label: 'Name', hintText: "John Smith"),
-          SizedBox(height: 20),
-          _ContactTextField(label: 'Email', hintText: "email@email.com"),
-          SizedBox(height: 20),
-          _ContactTextField(
-            label: 'Message',
-            hintText: "Your message",
-            maxLines: 6,
-          ),
-          const SizedBox(height: 30),
-          _ContactButton(),
-        ],
+      padding: EdgeInsets.all(isMobileOrTablet ? 16.0 : 32.0),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            _ContactTextField(label: 'Name', hintText: "John Smith"),
+            SizedBox(height: 20),
+            _ContactTextField(label: 'Email', hintText: "email@email.com"),
+            SizedBox(height: 20),
+            _ContactTextField(
+              label: 'Message',
+              hintText: "Your message",
+              maxLines: 6,
+            ),
+            const SizedBox(height: 30),
+            _ContactButton(),
+          ],
+        ),
       ),
     );
   }
@@ -154,6 +176,7 @@ class _ContactTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //TODO - Add border color and focus color
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

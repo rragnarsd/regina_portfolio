@@ -23,31 +23,40 @@ class ProfileTab extends StatelessWidget {
         ResponsiveBreakpoints.of(context).isTablet;
 
     final spacing = isMobileOrTablet ? 32.0 : 46.0;
+
     return MaxWidthBox(
       maxWidth: 1200,
       child: Padding(
+        //TODO - Handle overflow on very small screens (wrap/scroll)
         padding: const EdgeInsets.symmetric(horizontal: 32.0),
         child: Row(
           children: tabs.map((tab) {
             final isActive = tab == selectedTab;
+
             return Padding(
               padding: EdgeInsets.only(right: spacing),
               child: InkWell(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
                 onTap: () => onTabSelected(tab),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      tab.label.toUpperCase(),
+                    AnimatedDefaultTextStyle(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
                       style: TextStyle(
                         color: isActive ? Colors.white : Colors.grey,
                         fontWeight: isActive
                             ? FontWeight.w600
                             : FontWeight.normal,
                       ),
+                      child: Text(tab.label.toUpperCase()),
                     ),
-                    Container(
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 600),
+                      curve: Curves.easeInOut,
                       margin: const EdgeInsets.only(top: 8),
                       height: 2,
                       width: isMobileOrTablet ? 100 : 160,
@@ -69,9 +78,10 @@ class ProfileTabView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDesktop = MediaQuery.of(context).size.width > 852;
     return MaxWidthBox(
       maxWidth: 1200,
-      padding: EdgeInsets.symmetric(horizontal: 32.0),
+      padding: EdgeInsets.symmetric(horizontal: isDesktop ? 32.0 : 0),
       child: Column(
         children: [_InterestBanner(), SizedBox(height: 32), _ProfileAbout()],
       ),
@@ -79,16 +89,114 @@ class ProfileTabView extends StatelessWidget {
   }
 }
 
-class _ProfileAbout extends StatelessWidget {
+class _ProfileAbout extends StatefulWidget {
   const _ProfileAbout();
 
   @override
+  State<_ProfileAbout> createState() => _ProfileAboutState();
+}
+
+class _ProfileAboutState extends State<_ProfileAbout> {
+  @override
   Widget build(BuildContext context) {
-    return Placeholder(
-      color: Colors.white,
-      strokeWidth: 1,
-      fallbackHeight: 400,
-      fallbackWidth: double.infinity,
+    final bool isDesktop = MediaQuery.of(context).size.width > 852;
+    final isMobileOrTablet =
+        ResponsiveBreakpoints.of(context).isMobile ||
+        ResponsiveBreakpoints.of(context).isTablet;
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: !isDesktop ? 32.0 : 0),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey.shade800),
+        ),
+        padding: EdgeInsets.all(isMobileOrTablet ? 16.0 : 32.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '👋 Welcome',
+              style: TextStyle(
+                fontSize: 24,
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+
+            const SizedBox(height: 32),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'I’m Regina, a passionate Mobile Developer with over 3 years of experience building high-quality, cross-platform applications using Flutter. With a diverse background, a Diploma in Programming, a Bachelor’s degree in Anthropology, and a Vocational degree in Graphic Media. I bring together technical expertise, creativity, and a unique perspective on problem-solving. I thrive on bringing designs and wireframes to life, turning them into beautiful, responsive, and intuitive apps. My natural curiosity keeps me exploring new technologies and refining my craft.',
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
+                const SizedBox(height: 32),
+                Text(
+                  '💡 What I’m passionate about',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '✔️ Creating seamless user experiences from UI/UX designs',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                    Text(
+                      '✔️ Writing clean, efficient, and maintainable code',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                    Text(
+                      '✔️ Continuously learning and exploring emerging technologies',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                    Text(
+                      '✔️ Blending creativity with functionality',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 32),
+            Divider(color: Colors.grey.shade800, thickness: 1),
+            const SizedBox(height: 32),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '✅ Flags collected:',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Wrap(
+                  children: CountryFlag.values.map((flag) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Text(
+                        flag.emoji,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -146,17 +254,19 @@ class _InterestBannerState extends State<_InterestBanner> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            ...Interest.values.map(
-              (interest) => Text(
-                isDesktop
-                    ? '${interest.label}${interest == Interest.values.last ? '' : '  |  '}'
-                    : '${interest.label}  |  ',
-                style: TextStyle(
-                  fontSize: isDesktop ? 18 : 16,
-                  color: Color(0xffE0E0E0),
+            ...(() {
+              return _sortedInterests.map(
+                (interest) => Text(
+                  isDesktop
+                      ? '${interest.label}${interest == _sortedInterests.last ? '' : '  |  '}'
+                      : '${interest.label}  |  ',
+                  style: TextStyle(
+                    fontSize: isDesktop ? 18 : 16,
+                    color: Color(0xffE0E0E0),
+                  ),
                 ),
-              ),
-            ),
+              );
+            })(),
           ],
         ),
       ],
@@ -182,5 +292,11 @@ class _InterestBannerState extends State<_InterestBanner> {
               ),
             ),
     );
+  }
+
+  List<Interest> get _sortedInterests {
+    final interests = Interest.values.toList();
+    interests.sort((a, b) => a.label.compareTo(b.label));
+    return interests;
   }
 }
