@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
+import 'package:regina_portfolio/contact_provider.dart';
 import 'package:regina_portfolio/contact_section.dart';
 import 'package:regina_portfolio/enums.dart';
 import 'package:regina_portfolio/profile_section.dart';
 import 'package:regina_portfolio/project_section.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    await dotenv.load(fileName: ".env");
+  } catch (e) {
+    throw Exception('Error loading .env file: $e');
+  }
   runApp(const MyApp());
 }
 
@@ -14,23 +23,27 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Regina Portfolio',
-      debugShowCheckedModeBanner: false,
-      builder: (context, child) => ResponsiveBreakpoints.builder(
-        child: PortfolioHome(),
-        breakpoints: [
-          const Breakpoint(start: 0, end: 450, name: MOBILE),
-          const Breakpoint(start: 451, end: 800, name: TABLET),
-          const Breakpoint(start: 801, end: 1920, name: DESKTOP),
-          const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
-        ],
+    return ChangeNotifierProvider(
+      create: (context) => ContactProvider(),
+      child: MaterialApp(
+        title: 'Regina Portfolio',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(scaffoldBackgroundColor: const Color(0xff141313)),
+        builder: (context, child) => ResponsiveBreakpoints.builder(
+          child: PortfolioHome(),
+          breakpoints: [
+            const Breakpoint(start: 0, end: 450, name: MOBILE),
+            const Breakpoint(start: 451, end: 800, name: TABLET),
+            const Breakpoint(start: 801, end: 1920, name: DESKTOP),
+            const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
+          ],
+        ),
       ),
     );
   }
 }
 
-//TODO - Add microinteractions
+//TODO - Add launcher icon
 class PortfolioHome extends StatefulWidget {
   const PortfolioHome({super.key});
 
@@ -50,7 +63,6 @@ class _PortfolioHomeState extends State<PortfolioHome> {
           Expanded(
             child: ListView(
               children: [
-                //TODO - Add Hi, my name is Regina?
                 Align(
                   alignment: Alignment.centerRight,
                   child: Image.asset(
@@ -83,7 +95,7 @@ class _PortfolioHomeState extends State<PortfolioHome> {
               child: Row(
                 children: [
                   Text(
-                    '© 2025 Regina. All rights reserved.',
+                    '© 2025 Regina Ragnarsdottir.',
                     style: TextStyle(fontSize: 12, color: Color(0xffE0E0E0)),
                   ),
                 ],

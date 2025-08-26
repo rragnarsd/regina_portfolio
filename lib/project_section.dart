@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
-//TODO - Add sliding up and down with the mouse on the canvas
 class ProjectTab extends StatelessWidget {
   const ProjectTab({super.key});
 
@@ -30,9 +29,7 @@ class ProjectTab extends StatelessWidget {
                 childAspectRatio: 1.6,
               ),
               itemCount: 4,
-              itemBuilder: (context, index) {
-                return _ProjectCard(index: index);
-              },
+              itemBuilder: (context, index) => _ProjectCard(index: index),
             ),
           ],
         ),
@@ -128,7 +125,7 @@ class _ProjectCardState extends State<_ProjectCard>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SelectableText(
+                  Text(
                     "Project Name",
                     style: TextStyle(
                       color: Colors.white,
@@ -136,7 +133,7 @@ class _ProjectCardState extends State<_ProjectCard>
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  SelectableText(
+                  Text(
                     "Project Description",
                     style: TextStyle(
                       color: Colors.white,

@@ -179,6 +179,7 @@ class _ProfileAboutState extends State<_ProfileAbout> {
                 ),
                 const SizedBox(height: 16),
                 Wrap(
+                  //TODO - Add shimmer loading
                   children: CountryFlag.values.map((flag) {
                     return Padding(
                       padding: const EdgeInsets.only(right: 8.0),

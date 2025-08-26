@@ -1,5 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:regina_portfolio/contact_provider.dart';
+import 'package:regina_portfolio/contact_validators.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -77,9 +80,7 @@ class _ContactInfo extends StatelessWidget {
   }
 
   Future<void> _launchUrl(Uri url) async {
-    if (!await launchUrl(url)) {
-      throw Exception('Could not launch $url');
-    }
+    if (!await launchUrl(url)) throw Exception('Could not launch $url');
   }
 }
 
@@ -91,7 +92,6 @@ class _ContactForm extends StatefulWidget {
 }
 
 class _ContactFormState extends State<_ContactForm> {
-  //TODO - Add validation and send functionality
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -111,6 +111,8 @@ class _ContactFormState extends State<_ContactForm> {
         ResponsiveBreakpoints.of(context).isMobile ||
         ResponsiveBreakpoints.of(context).isTablet;
 
+    final contactProvider = context.watch<ContactProvider>();
+
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey.shade800),
@@ -120,43 +122,120 @@ class _ContactFormState extends State<_ContactForm> {
         key: _formKey,
         child: Column(
           children: [
-            _ContactTextField(label: 'Name', hintText: "John Smith"),
+            _ContactTextField(
+              label: 'Name',
+              hintText: "John Smith",
+              controller: _nameController,
+              validator: (value) => ContactValidators.validateName(value),
+            ),
             SizedBox(height: 20),
-            _ContactTextField(label: 'Email', hintText: "email@email.com"),
+            _ContactTextField(
+              label: 'Email',
+              hintText: "email@email.com",
+              controller: _emailController,
+              validator: (value) => ContactValidators.validateEmail(value),
+            ),
             SizedBox(height: 20),
             _ContactTextField(
               label: 'Message',
               hintText: "Your message",
               maxLines: 6,
+              controller: _messageController,
+              validator: (value) => ContactValidators.validateMessage(value),
             ),
             const SizedBox(height: 30),
-            _ContactButton(),
+            _ContactButton(
+              onPressed: contactProvider.isLoading
+                  ? null
+                  : () => _handleSendEmail(contactProvider),
+            ),
+            if (contactProvider.errorMessage != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: Text(
+                  contactProvider.errorMessage!,
+                  style: TextStyle(color: Colors.red, fontSize: 14),
+                ),
+              ),
           ],
         ),
       ),
     );
   }
+
+  Future<void> _handleSendEmail(ContactProvider contactProvider) async {
+    if (_formKey.currentState!.validate()) {
+      final isSuccess = await contactProvider.sendEmail(
+        name: _nameController.text,
+        email: _emailController.text,
+        message: _messageController.text,
+      );
+
+      if (isSuccess) {
+        clearControllers();
+        //TODO - Change snackbar color
+        if (mounted) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Email sent successfully!')));
+        }
+      } else {
+        //TODO - Change snackbar color
+        if (mounted) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Failed to send email')));
+        }
+      }
+    }
+  }
+
+  void clearControllers() {
+    _nameController.clear();
+    _emailController.clear();
+    _messageController.clear();
+  }
 }
 
 class _ContactButton extends StatelessWidget {
-  const _ContactButton();
+  const _ContactButton({required this.onPressed});
+
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
+    final contactProvider = context.watch<ContactProvider>();
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.grey,
           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+          disabledBackgroundColor: Colors.grey,
         ),
-        onPressed: () {},
+        onPressed: onPressed,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: const Text(
-            "Send Message",
-            style: TextStyle(color: Colors.black),
-          ),
+          child: contactProvider.isLoading
+              ? const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(color: Colors.black),
+                    ),
+                    SizedBox(width: 16),
+                    Text(
+                      "Sending...",
+                      style: TextStyle(color: Colors.black, fontSize: 16),
+                    ),
+                  ],
+                )
+              : const Text(
+                  "Send Message",
+                  style: TextStyle(color: Colors.black, fontSize: 16),
+                ),
         ),
       ),
     );
@@ -167,28 +246,46 @@ class _ContactTextField extends StatelessWidget {
   const _ContactTextField({
     required this.label,
     required this.hintText,
+    required this.controller,
     this.maxLines = 1,
+    this.validator,
   });
 
   final String label;
   final String hintText;
+  final TextEditingController controller;
   final int maxLines;
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
-    //TODO - Add border color and focus color
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label, style: TextStyle(color: Colors.white)),
         SizedBox(height: 12),
-        TextField(
+        TextFormField(
+          controller: controller,
+          validator: validator,
+          style: TextStyle(color: Colors.white),
           decoration: InputDecoration(
             hintText: hintText,
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide(color: Colors.white70),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: Colors.white70, width: 2),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: Colors.red),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: Colors.red, width: 2),
             ),
           ),
           maxLines: maxLines,
