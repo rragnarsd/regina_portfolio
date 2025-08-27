@@ -1,16 +1,30 @@
-# regina_portfolio
+# ReginaPortfolio
 
-A new Flutter project.
+## :package: Packages
+- ResponsiveFramework - https://pub.dev/packages/responsive_framework
+- UrlLauncher - https://pub.dev/packages/url_launcher
+- Http - https://pub.dev/packages/http
+- GoogleFonts - https://pub.dev/packages/google_fonts
+- Provider - https://pub.dev/packages/provider
+- Lottie - https://pub.dev/packages/lottie
+- FlutterSvg - https://pub.dev/packages/flutter_svg
+- FlutterAnimate - https://pub.dev/packages/flutter_animate
 
-## Getting Started
+##  :art: Design
+- Fully custom design showcasing my visual and UI/UX skills
+- Font Family: **Montserrat**
+- Animations created with **Lottie**
+- Logo crafted in **Canva**
+- Color palette:
+  
+  <img width="371" height="40" alt="Frame" src="https://github.com/user-attachments/assets/1e89874f-9508-4c2d-974d-937e13b2cb18" />
 
-This project is a starting point for a Flutter application.
+  ## :link: Link to Page
 
-A few resources to get you started if this is your first Flutter project:
+  ## :camera: Screenshots
+  <img width="2160" height="1215" alt="2" src="https://github.com/user-attachments/assets/a442b26b-770d-4753-9676-737cef167341" />
+  <img width="2160" height="1215" alt="3" src="https://github.com/user-attachments/assets/50e047d7-5321-4dbd-96b0-77aab19a436e" />
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+
