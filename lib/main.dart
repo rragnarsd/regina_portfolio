@@ -7,6 +7,7 @@ import 'package:regina_portfolio/contact/contact_section.dart';
 import 'package:regina_portfolio/profile/profile_section.dart';
 import 'package:regina_portfolio/project/project_section.dart';
 import 'package:regina_portfolio/utils/colors.dart';
+import 'package:regina_portfolio/utils/constants.dart';
 import 'package:regina_portfolio/utils/enums.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => ContactProvider(),
       child: MaterialApp(
-        title: 'Regina Portfolio',
+        title: AppConstants.appTitle,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(textTheme: GoogleFonts.montserratTextTheme()),
         home: const PortfolioHome(),
@@ -69,7 +70,7 @@ class _PortfolioHomeState extends State<PortfolioHome> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: Image.asset(
-                    "assets/worldmap.png",
+                    Images.worldImage,
                     fit: BoxFit.contain,
                     opacity: const AlwaysStoppedAnimation(0.6),
                   ),
@@ -93,7 +94,7 @@ class _PortfolioHomeState extends State<PortfolioHome> {
             child: Align(
               alignment: Alignment.bottomCenter,
               child: Text(
-                '© 2025 Regina Ragnarsdottir.',
+                AppConstants.copyrightNotice,
                 style: TextStyle(
                   fontSize: 12,
                   color: AppColors.tonalSurfaceA50,

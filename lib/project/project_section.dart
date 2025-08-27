@@ -1,9 +1,11 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:regina_portfolio/models/project_model.dart';
 import 'package:regina_portfolio/utils/colors.dart';
+import 'package:regina_portfolio/utils/constants.dart';
+import 'package:regina_portfolio/utils/enums.dart';
 import 'package:regina_portfolio/utils/extensions.dart';
-import 'package:regina_portfolio/utils/local_data.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -27,16 +29,11 @@ class ProjectTab extends StatelessWidget {
               crossAxisCount: context.isMobileOrTablet ? 1 : 2,
               crossAxisSpacing: 16,
               mainAxisSpacing: 16,
-              childAspectRatio: ResponsiveBreakpoints.of(context).isMobile
-                  ? 1.6
-                  : 2.4,
+              childAspectRatio: 2.4,
             ),
-            itemCount: localData.length,
-            itemBuilder: (context, index) => _ProjectCard(
-              index: index,
-              projectName: localData[index].projectName,
-              projectTags: localData[index].projectTags,
-            ),
+            itemCount: projects.length,
+            itemBuilder: (context, index) =>
+                _ProjectCard(project: projects[index]),
           ),
         ],
       ),
@@ -45,15 +42,9 @@ class ProjectTab extends StatelessWidget {
 }
 
 class _ProjectCard extends StatefulWidget {
-  const _ProjectCard({
-    required this.index,
-    required this.projectName,
-    required this.projectTags,
-  });
+  const _ProjectCard({required this.project});
 
-  final int index;
-  final String projectName;
-  final List<String> projectTags;
+  final Project project;
 
   @override
   State<_ProjectCard> createState() => _ProjectCardState();
@@ -86,7 +77,8 @@ class _ProjectCardState extends State<_ProjectCard>
 
   @override
   Widget build(BuildContext context) {
-    final Uri url = Uri.parse(localData[widget.index].projectUrl);
+    final project = widget.project;
+    final Uri url = Uri.parse(project.url);
 
     return MouseRegion(
       onEnter: (_) {
@@ -99,20 +91,36 @@ class _ProjectCardState extends State<_ProjectCard>
       },
       child: InkWell(
         mouseCursor: SystemMouseCursors.click,
-        onTap: () async => await _launchUrl(url),
+        onTap: () async => await _launchUrl(url: url),
         child: ClipRRect(
           child: Stack(
+            clipBehavior: Clip.hardEdge,
             children: [
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  localData[widget.index].projectName,
-                  style: TextStyle(
-                    color: AppColors.primaryA10,
-                    fontSize: context.isMobileOrTablet ? 20 : 24,
-                    fontWeight: FontWeight.bold,
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: Image.asset(
+                      project.image,
+                      fit: BoxFit.cover,
+                      height: double.infinity,
+                    ),
                   ),
-                ),
+                  SizedBox(width: 16),
+                  Expanded(
+                    flex: 2,
+                    child: Text(
+                      project.name,
+                      style: TextStyle(
+                        color: AppColors.primaryA10,
+                        fontSize: context.isMobileOrTablet ? 20 : 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               SlideTransition(
                 position: _animation,
@@ -132,7 +140,7 @@ class _ProjectCardState extends State<_ProjectCard>
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16.0),
                 child: Align(
                   alignment: Alignment.topRight,
                   child: Transform.rotate(
@@ -147,8 +155,8 @@ class _ProjectCardState extends State<_ProjectCard>
               ),
               if (_isHovered)
                 ProjectHover(
-                  projectName: widget.projectName,
-                  projectTags: widget.projectTags,
+                  projectName: project.name,
+                  projectTags: project.tags,
                 ),
               AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
@@ -169,8 +177,12 @@ class _ProjectCardState extends State<_ProjectCard>
     );
   }
 
-  Future<void> _launchUrl(Uri url) async {
-    if (!await launchUrl(url)) throw Exception('Could not launch $url');
+  Future<void> _launchUrl({required Uri url}) async {
+    if (!await launchUrl(url)) {
+      if (mounted) {
+        context.showErrorSnackBar('${ContactText.launchUrlError} $url');
+      }
+    }
   }
 }
 
@@ -182,7 +194,7 @@ class ProjectHover extends StatelessWidget {
   });
 
   final String projectName;
-  final List<String> projectTags;
+  final List<ProjectTag> projectTags;
 
   @override
   Widget build(BuildContext context) {
@@ -195,16 +207,14 @@ class ProjectHover extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          ResponsiveBreakpoints.of(context).isMobile
-              ? SizedBox.shrink()
-              : Text(
-                  projectName,
-                  style: TextStyle(
-                    color: AppColors.primaryA10,
-                    fontSize: context.isMobileOrTablet ? 14 : 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+          Text(
+            projectName,
+            style: TextStyle(
+              color: AppColors.primaryA10,
+              fontSize: context.isMobileOrTablet ? 14 : 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
           Wrap(
             spacing: 8,
             runSpacing: 4,
@@ -219,7 +229,7 @@ class ProjectHover extends StatelessWidget {
                     side: BorderSide(color: AppColors.transparent),
                     elevation: 2,
                     label: Text(
-                      tag,
+                      tag.label,
                       style: TextStyle(
                         fontSize: context.isMobileOrTablet ? 14 : 16,
                         fontWeight: FontWeight.bold,

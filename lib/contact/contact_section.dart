@@ -1,11 +1,13 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:regina_portfolio/contact/contact_provider.dart';
 import 'package:regina_portfolio/contact/contact_validators.dart';
 import 'package:regina_portfolio/utils/colors.dart';
+import 'package:regina_portfolio/utils/constants.dart';
 import 'package:regina_portfolio/utils/extensions.dart';
+import 'package:regina_portfolio/utils/styles.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -14,37 +16,29 @@ class ContactTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final spacing = context.isMobileOrTablet ? 32.0 : 64.0;
+    final bool isMobileTablet = context.isMobileOrTablet;
+    final double spacing = isMobileTablet ? 32.0 : 64.0;
+
+    final children = isMobileTablet
+        ? [_ContactInfo(), SizedBox(height: spacing), _ContactForm()]
+        : [
+            Flexible(child: _ContactForm()),
+            SizedBox(width: spacing),
+            Flexible(child: _ContactInfo()),
+          ];
 
     return MaxWidthBox(
       maxWidth: 1200,
-      padding: EdgeInsets.symmetric(
-        horizontal: context.isMobileOrTablet ? 18.0 : 32.0,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: isMobileTablet ? 18 : 32),
       child: ResponsiveRowColumn(
-        layout: context.isMobileOrTablet
+        layout: isMobileTablet
             ? ResponsiveRowColumnType.COLUMN
             : ResponsiveRowColumnType.ROW,
         columnMainAxisSize: MainAxisSize.max,
         rowMainAxisSize: MainAxisSize.max,
-        children: [
-          ResponsiveRowColumnItem(
-            child: context.isMobileOrTablet
-                ? _ContactInfo()
-                : Flexible(child: _ContactForm()),
-          ),
-          ResponsiveRowColumnItem(
-            child: SizedBox(
-              width: context.isMobileOrTablet ? 0 : spacing,
-              height: context.isMobileOrTablet ? spacing : 0,
-            ),
-          ),
-          ResponsiveRowColumnItem(
-            child: context.isMobileOrTablet
-                ? _ContactForm()
-                : Flexible(child: _ContactInfo()),
-          ),
-        ],
+        children: children
+            .map((child) => ResponsiveRowColumnItem(child: child))
+            .toList(),
       ),
     );
   }
@@ -55,7 +49,7 @@ class _ContactInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Uri url = Uri.parse('https://www.linkedin.com/in/reginaragnarsd/');
+    final isMobileTablet = context.isMobileOrTablet;
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -65,43 +59,68 @@ class _ContactInfo extends StatelessWidget {
               alignment: Alignment.topCenter,
               heightFactor: 0.8,
               child: Lottie.asset(
-                'assets/lottie.json',
-                height: context.isMobileOrTablet ? 400 : 500,
+                Images.lottieJson,
+                height: isMobileTablet ? 400 : 500,
               ),
             ),
           ),
-          RichText(
-            textAlign: TextAlign.left,
-            text: TextSpan(
-              mouseCursor: SystemMouseCursors.precise,
-              text: 'Let\'s connect! Feel free to reach out to me on ',
-              style: TextStyle(
-                fontSize: context.isMobileOrTablet ? 16 : 18,
-                color: AppColors.primaryA0,
-                fontWeight: FontWeight.w400,
-                height: 1.4,
-              ),
-              children: <TextSpan>[
-                TextSpan(
-                  text: 'LinkedIn',
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () async => await _launchUrl(url),
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
-              ],
+          Text(
+            ContactText.socialContact,
+            style: TextStyle(
+              fontSize: isMobileTablet ? 16 : 18,
+              color: AppColors.primaryA0,
+              fontWeight: FontWeight.w400,
             ),
+            textAlign: TextAlign.center,
           ),
-          context.isMobileOrTablet ? SizedBox.shrink() : SizedBox(height: 120),
+          SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SocialIcon(url: Links.linkedIn, iconUrl: Images.linkedInIcon),
+              SizedBox(width: 16),
+              SocialIcon(url: Links.github, iconUrl: Images.githubIcon),
+            ],
+          ),
+          if (!isMobileTablet) const SizedBox(height: 120),
         ],
       ),
     );
   }
+}
 
-  Future<void> _launchUrl(Uri url) async {
-    if (!await launchUrl(url)) throw Exception('Could not launch $url');
+class SocialIcon extends StatelessWidget {
+  const SocialIcon({super.key, required this.url, required this.iconUrl});
+
+  final Uri url;
+  final String iconUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => _launchUrl(context),
+      mouseCursor: SystemMouseCursors.click,
+      child: SvgPicture.asset(
+        iconUrl,
+        width: 32,
+        height: 32,
+        colorFilter: ColorFilter.mode(AppColors.primaryA0, BlendMode.srcIn),
+      ),
+    );
+  }
+
+  Future<void> _launchUrl(BuildContext context) async {
+    try {
+      if (!await launchUrl(url)) {
+        if (context.mounted) {
+          context.showErrorSnackBar('${ContactText.launchUrlError} $url');
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        context.showErrorSnackBar('${ContactText.launchUrlError} $url');
+      }
+    }
   }
 }
 
@@ -129,6 +148,7 @@ class _ContactFormState extends State<_ContactForm> {
   @override
   Widget build(BuildContext context) {
     final contactProvider = context.watch<ContactProvider>();
+    final spacing = 20.0;
 
     return Container(
       decoration: BoxDecoration(
@@ -141,22 +161,22 @@ class _ContactFormState extends State<_ContactForm> {
         child: Column(
           children: [
             _ContactTextField(
-              label: 'Name',
-              hintText: "John Smith",
+              label: ContactText.nameLabel,
+              hintText: ContactText.nameHint,
               controller: _nameController,
               validator: (value) => ContactValidators.validateName(value),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: spacing),
             _ContactTextField(
-              label: 'Email',
-              hintText: "email@email.com",
+              label: ContactText.emailLabel,
+              hintText: ContactText.emailHint,
               controller: _emailController,
               validator: (value) => ContactValidators.validateEmail(value),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: spacing),
             _ContactTextField(
-              label: 'Message',
-              hintText: "Your message",
+              label: ContactText.messageLabel,
+              hintText: ContactText.messageHint,
               maxLines: 6,
               controller: _messageController,
               validator: (value) => ContactValidators.validateMessage(value),
@@ -168,14 +188,13 @@ class _ContactFormState extends State<_ContactForm> {
                   ? null
                   : () => _handleSendEmail(contactProvider),
             ),
-            if (contactProvider.errorMessage != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: Text(
-                  contactProvider.errorMessage!,
-                  style: TextStyle(color: AppColors.error, fontSize: 14),
-                ),
+            if (contactProvider.errorMessage != null) ...[
+              const SizedBox(height: 16),
+              Text(
+                contactProvider.errorMessage!,
+                style: TextStyle(color: AppColors.error, fontSize: 14),
               ),
+            ],
           ],
         ),
       ),
@@ -183,33 +202,21 @@ class _ContactFormState extends State<_ContactForm> {
   }
 
   Future<void> _handleSendEmail(ContactProvider contactProvider) async {
-    if (_formKey.currentState!.validate()) {
-      final isSuccess = await contactProvider.sendEmail(
-        name: _nameController.text,
-        email: _emailController.text,
-        message: _messageController.text,
-      );
+    if (!_formKey.currentState!.validate()) return;
 
-      if (isSuccess) {
-        clearControllers();
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Email sent successfully!'),
-              backgroundColor: AppColors.surfaceA50.withValues(alpha: 0.2),
-            ),
-          );
-        }
-      } else {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Failed to send email'),
-              backgroundColor: AppColors.error,
-            ),
-          );
-        }
-      }
+    final result = await contactProvider.sendMessage(
+      name: _nameController.text,
+      email: _emailController.text,
+      message: _messageController.text,
+    );
+
+    if (!mounted) return;
+
+    if (result.success) {
+      clearControllers();
+      context.showSuccessSnackBar(ContactText.successMessage);
+    } else {
+      context.showErrorSnackBar(result.error ?? ContactText.errorMessage);
     }
   }
 
@@ -229,67 +236,55 @@ class _ContactButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final contactProvider = context.watch<ContactProvider>();
 
+    final textStyle = TextStyle(
+      color: AppColors.surfaceA0,
+      fontSize: context.isMobileOrTablet ? 14 : 16,
+      fontWeight: FontWeight.w600,
+    );
+
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryA10,
-          padding: const EdgeInsets.all(16.0),
-          disabledBackgroundColor: AppColors.tonalSurfaceA50,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.0),
-          ),
-        ),
+        style: buttonStyle,
         onPressed: onPressed,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: contactProvider.isLoading
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        color: AppColors.surfaceA0,
-                        strokeWidth: 2.4,
-                      ),
-                    ),
-                    SizedBox(width: 16),
-                    Text(
-                      "Sending...",
-                      style: TextStyle(
-                        color: AppColors.surfaceA0,
-                        fontSize: context.isMobileOrTablet ? 14 : 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Send Message",
-                      style: TextStyle(
-                        color: AppColors.surfaceA0,
-                        fontSize: context.isMobileOrTablet ? 14 : 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Transform.translate(
-                      offset: const Offset(12, 0),
-                      child: Transform.rotate(
-                        angle: -0.5,
-                        child: const Icon(
-                          Icons.send,
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 200),
+            child: contactProvider.isLoading
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
                           color: AppColors.surfaceA0,
-                          size: 24,
+                          strokeWidth: 2.4,
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                      const SizedBox(width: 16),
+                      Text(ContactText.sendingMessage, style: textStyle),
+                    ],
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(ContactText.sendButtonText, style: textStyle),
+                      Transform.translate(
+                        offset: const Offset(12, 0),
+                        child: Transform.rotate(
+                          angle: -0.5,
+                          child: const Icon(
+                            Icons.send,
+                            color: AppColors.surfaceA0,
+                            size: 24,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+          ),
         ),
       ),
     );
@@ -327,36 +322,7 @@ class _ContactTextField extends StatelessWidget {
           autofocus: true,
           cursorColor: AppColors.primaryA10,
           textInputAction: textInputAction,
-          decoration: InputDecoration(
-            errorStyle: TextStyle(color: AppColors.error),
-            hintText: hintText,
-            alignLabelWithHint: true,
-            contentPadding: const EdgeInsets.symmetric(vertical: 16.0),
-            prefix: const Padding(padding: EdgeInsets.only(left: 16.0)),
-            hintStyle: TextStyle(
-              color: AppColors.surfaceA50.withValues(alpha: 0.8),
-            ),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: AppColors.tonalSurfaceA50),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(
-                color: AppColors.tonalSurfaceA50,
-                width: 2,
-              ),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: AppColors.error),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: AppColors.error, width: 2),
-            ),
-          ),
+          decoration: textFieldDecoration.copyWith(hintText: hintText),
           maxLines: maxLines,
         ),
       ],

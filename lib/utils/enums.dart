@@ -1,22 +1,34 @@
-enum Interest { animalWelfare, uiux, running, travel, programming }
+enum Interest {
+  animalWelfare('Animal Welfare'),
+  programming('Programming'),
+  running('Running'),
+  uiux('UI/UX'),
+  travel('Travel');
 
-extension InterestExtension on Interest {
-  String get label => switch (this) {
-    Interest.animalWelfare => 'Animal Welfare',
-    Interest.programming => 'Programming',
-    Interest.running => 'Running',
-    Interest.uiux => 'UI/UX',
-    Interest.travel => 'Travel',
-  };
+  final String label;
+  const Interest(this.label);
 }
 
-enum TabItem { profile, projects, contact }
+enum TabItem {
+  profile('Profile'),
+  projects('Projects'),
+  contact('Contact');
 
-extension TabItemExtension on TabItem {
+  final String label;
+  const TabItem(this.label);
+}
+
+enum ProjectTag { flutter, flutterWeb, firebase, provider, getX, sembast, uiux }
+
+extension ProjectTagExtension on ProjectTag {
   String get label => switch (this) {
-    TabItem.profile => 'Profile',
-    TabItem.projects => 'Projects',
-    TabItem.contact => 'Contact',
+    ProjectTag.flutter => 'Flutter',
+    ProjectTag.flutterWeb => 'Flutter Web',
+    ProjectTag.firebase => 'Firebase',
+    ProjectTag.provider => 'Provider',
+    ProjectTag.getX => 'GetX',
+    ProjectTag.sembast => 'Sembast',
+    ProjectTag.uiux => 'UI/UX',
   };
 }
 

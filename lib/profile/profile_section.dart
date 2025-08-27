@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:regina_portfolio/utils/colors.dart';
+import 'package:regina_portfolio/utils/constants.dart';
 import 'package:regina_portfolio/utils/enums.dart';
 import 'package:regina_portfolio/utils/extensions.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -20,34 +21,32 @@ class ProfileTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final spacing = context.isMobileOrTablet ? 32.0 : 46.0;
+    final isDesktop = !context.isMobileOrTablet;
+    final spacing = isDesktop ? 46.0 : 32.0;
 
     return MaxWidthBox(
       maxWidth: 1200,
-      padding: EdgeInsets.symmetric(
-        horizontal: context.isMobileOrTablet ? 16.0 : 32.0,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: isDesktop ? 32.0 : 16.0),
       child: SizedBox(
-        width: MediaQuery.of(context).size.width,
+        width: MediaQuery.sizeOf(context).width,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: tabs.map((tab) {
+            children: List.generate(tabs.length, (index) {
+              final tab = tabs[index];
               final isActive = tab == selectedTab;
 
               return Padding(
-                padding: EdgeInsets.only(right: spacing),
+                padding: EdgeInsets.only(
+                  right: index == tabs.length - 1 ? 0 : spacing,
+                ),
                 child: InkWell(
                   splashColor: AppColors.transparent,
                   highlightColor: AppColors.transparent,
                   onTap: () => onTabSelected(tab),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       AnimatedDefaultTextStyle(
                         duration: const Duration(milliseconds: 300),
@@ -59,6 +58,7 @@ class ProfileTab extends StatelessWidget {
                           fontWeight: isActive
                               ? FontWeight.w600
                               : FontWeight.normal,
+                          fontSize: isDesktop ? 16 : 14,
                         ),
                         child: Text(tab.label.toUpperCase()),
                       ),
@@ -67,7 +67,7 @@ class ProfileTab extends StatelessWidget {
                         curve: Curves.easeInOut,
                         margin: const EdgeInsets.only(top: 8),
                         height: 2,
-                        width: context.isMobileOrTablet ? 80 : 160,
+                        width: isDesktop ? 160 : 80,
                         color: isActive
                             ? AppColors.primaryA0
                             : AppColors.tonalSurfaceA50,
@@ -76,7 +76,7 @@ class ProfileTab extends StatelessWidget {
                   ),
                 ),
               );
-            }).toList(),
+            }),
           ),
         ),
       ),
@@ -105,7 +105,9 @@ class _ProfileAbout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isDesktop = MediaQuery.of(context).size.width > 852;
+    final isDesktop = MediaQuery.of(context).size.width > 852;
+    final isMobileTablet = context.isMobileOrTablet;
+    final padding = isMobileTablet ? 16.0 : 32.0;
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: isDesktop ? 0.0 : 16.0),
@@ -114,14 +116,14 @@ class _ProfileAbout extends StatelessWidget {
           borderRadius: BorderRadius.circular(4),
           border: Border.all(color: AppColors.tonalSurfaceA30),
         ),
-        padding: EdgeInsets.all(context.isMobileOrTablet ? 16.0 : 32.0),
+        padding: EdgeInsets.all(padding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '👋 Welcome',
+              ProfileText.welcome,
               style: TextStyle(
-                fontSize: context.isMobileOrTablet ? 20 : 24,
+                fontSize: isMobileTablet ? 20 : 24,
                 color: AppColors.primaryA10,
                 fontWeight: FontWeight.w600,
               ),
@@ -129,7 +131,7 @@ class _ProfileAbout extends StatelessWidget {
             const SizedBox(height: 32),
             _ProfileSection(),
             const SizedBox(height: 32),
-            Divider(color: AppColors.tonalSurfaceA30, thickness: 1),
+            const Divider(color: AppColors.tonalSurfaceA30, thickness: 1),
             const SizedBox(height: 32),
             _FlagSection(),
           ],
@@ -148,7 +150,7 @@ class _ProfileSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'I’m Regina, a passionate Mobile Developer with over 3 years of experience building high-quality, cross-platform applications using Flutter. With a diverse background, a Diploma in Programming, a Bachelor’s degree in Anthropology, and a Vocational degree in Graphic Media. I bring together technical expertise, creativity, and a unique perspective on problem-solving. I thrive on bringing designs and wireframes to life, turning them into beautiful, responsive, and intuitive apps. My natural curiosity keeps me exploring new technologies and refining my craft.',
+          ProfileText.aboutMe,
           style: TextStyle(
             fontSize: context.isMobileOrTablet ? 14 : 16,
             color: AppColors.primaryA10,
@@ -156,7 +158,7 @@ class _ProfileSection extends StatelessWidget {
         ),
         const SizedBox(height: 32),
         Text(
-          '💡 What I’m passionate about',
+          ProfileText.aboutTitle,
           style: TextStyle(
             fontSize: context.isMobileOrTablet ? 14 : 16,
             color: AppColors.primaryA10,
@@ -166,36 +168,17 @@ class _ProfileSection extends StatelessWidget {
         const SizedBox(height: 16),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '✔️ Creating seamless user experiences from UI/UX designs',
-              style: TextStyle(
-                fontSize: context.isMobileOrTablet ? 14 : 16,
-                color: AppColors.primaryA10,
-              ),
-            ),
-            Text(
-              '✔️ Writing clean, efficient, and maintainable code',
-              style: TextStyle(
-                fontSize: context.isMobileOrTablet ? 14 : 16,
-                color: AppColors.primaryA10,
-              ),
-            ),
-            Text(
-              '✔️ Continuously learning and exploring emerging technologies',
-              style: TextStyle(
-                fontSize: context.isMobileOrTablet ? 14 : 16,
-                color: AppColors.primaryA10,
-              ),
-            ),
-            Text(
-              '✔️ Blending creativity with functionality',
-              style: TextStyle(
-                fontSize: context.isMobileOrTablet ? 14 : 16,
-                color: AppColors.primaryA10,
-              ),
-            ),
-          ],
+          children: ProfileText.aboutDetails
+              .map(
+                (detail) => Text(
+                  detail,
+                  style: TextStyle(
+                    fontSize: context.isMobileOrTablet ? 14 : 16,
+                    color: AppColors.primaryA10,
+                  ),
+                ),
+              )
+              .toList(),
         ),
       ],
     );
@@ -211,7 +194,7 @@ class _FlagSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '✅ Flags collected:',
+          ProfileText.achievementsTitle,
           style: TextStyle(
             fontSize: context.isMobileOrTablet ? 14 : 16,
             color: AppColors.primaryA10,
@@ -289,7 +272,7 @@ class _InterestBannerState extends State<_InterestBanner> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          'I’m interested in: ',
+          ProfileText.interestsTitle,
           style: TextStyle(
             fontSize: context.isMobileOrTablet ? 14 : 16,
             color: AppColors.primaryA10,

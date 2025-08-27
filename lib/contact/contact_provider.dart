@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:regina_portfolio/models/contact_model.dart';
+import 'package:regina_portfolio/utils/constants.dart';
 
 class ContactProvider extends ChangeNotifier {
   bool _isLoading = false;
@@ -21,11 +23,20 @@ class ContactProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  final serviceId = dotenv.env['SERVICE_ID'];
-  final templateId = dotenv.env['TEMPLATE_ID'];
-  final userId = dotenv.env['USER_ID'];
+  final String serviceId;
+  final String templateId;
+  final String userId;
 
-  Future<bool> sendEmail({
+  ContactProvider()
+    : serviceId = dotenv.env['SERVICE_ID'] ?? '',
+      templateId = dotenv.env['TEMPLATE_ID'] ?? '',
+      userId = dotenv.env['USER_ID'] ?? '' {
+    if (serviceId.isEmpty || templateId.isEmpty || userId.isEmpty) {
+      throw Exception('EmailJS environment variables are missing.');
+    }
+  }
+
+  Future<ContactResult> sendMessage({
     required String name,
     required String email,
     required String message,
@@ -33,35 +44,43 @@ class ContactProvider extends ChangeNotifier {
     setIsLoading(true);
     setErrorMessage(null);
 
+    final body = ContactModel(
+      serviceId: serviceId,
+      templateId: templateId,
+      userId: userId,
+      name: name,
+      email: email,
+      message: message,
+    );
+
     try {
-      final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+      final url = Links.messageUrl;
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'service_id': serviceId,
-          'template_id': templateId,
-          'user_id': userId,
-          'template_params': {
-            'from_name': name,
-            'from_email': email,
-            'message': message,
-          },
-        }),
+        body: jsonEncode(body.toJson()),
       );
 
       if (response.statusCode == 200) {
-        setIsLoading(false);
-        return true;
+        return ContactResult(success: true);
       } else {
-        setErrorMessage('Failed to send email. ${response.body}');
-        setIsLoading(false);
-        return false;
+        String? errorMessage;
+        try {
+          final jsonBody = jsonDecode(response.body);
+          errorMessage = jsonBody['error'] ?? response.body;
+        } catch (_) {
+          errorMessage = response.body;
+        }
+
+        setErrorMessage(errorMessage);
+        return ContactResult(success: false, error: errorMessage);
       }
     } catch (error) {
-      setErrorMessage('Error sending email: $error');
+      final errMsg = 'Error sending email: $error';
+      setErrorMessage(errMsg);
+      return ContactResult(success: false, error: errMsg);
+    } finally {
       setIsLoading(false);
-      return false;
     }
   }
 }
