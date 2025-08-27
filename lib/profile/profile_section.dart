@@ -55,8 +55,8 @@ class ProfileTab extends StatelessWidget {
                         style: AppTextStyles.regular(
                           fontSize: isDesktop ? 16 : 14,
                           color: isActive
-                              ? AppColors.primaryA0
-                              : AppColors.tonalSurfaceA50,
+                              ? AppColors.primaryA10
+                              : AppColors.surfaceA50,
                           fontWeight: isActive
                               ? FontWeight.w600
                               : FontWeight.normal,
@@ -70,8 +70,8 @@ class ProfileTab extends StatelessWidget {
                         height: 2,
                         width: isDesktop ? 160 : 80,
                         color: isActive
-                            ? AppColors.primaryA0
-                            : AppColors.tonalSurfaceA50,
+                            ? AppColors.primaryA10
+                            : AppColors.surfaceA50,
                       ),
                     ],
                   ),

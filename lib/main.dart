@@ -95,10 +95,7 @@ class _PortfolioHomeState extends State<PortfolioHome> {
               alignment: Alignment.bottomCenter,
               child: Text(
                 AppConstants.copyrightNotice,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: AppColors.tonalSurfaceA50,
-                ),
+                style: TextStyle(fontSize: 12, color: AppColors.surfaceA50),
               ),
             ),
           ),

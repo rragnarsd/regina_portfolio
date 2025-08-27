@@ -100,7 +100,7 @@ class SocialIcon extends StatelessWidget {
         iconUrl,
         width: 32,
         height: 32,
-        colorFilter: ColorFilter.mode(AppColors.primaryA0, BlendMode.srcIn),
+        colorFilter: ColorFilter.mode(AppColors.primaryA10, BlendMode.srcIn),
       ),
     );
   }

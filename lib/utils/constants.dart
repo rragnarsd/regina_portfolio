@@ -34,20 +34,20 @@ class ProjectNames {
 
 class ContactText {
   static const socialContact =
-      "Prefer connecting on socials? You can also find me here:";
-  static const launchUrlError = "Could not launch URL";
+      'Prefer connecting on socials? You can also find me here:';
+  static const launchUrlError = 'Could not launch URL';
 
-  static const nameLabel = "Name";
-  static const nameHint = "John Smith";
-  static const emailLabel = "Email";
-  static const emailHint = "email@email.com";
-  static const messageLabel = "Message";
-  static const messageHint = "Your message here...";
+  static const nameLabel = 'Name';
+  static const nameHint = 'John Smith';
+  static const emailLabel = 'Email';
+  static const emailHint = 'email@email.com';
+  static const messageLabel = 'Message';
+  static const messageHint = 'Your message here...';
 
-  static const successMessage = "Message sent successfully!";
-  static const errorMessage = "Failed to send message. Please try again.";
-  static const sendingMessage = "Sending...";
-  static const sendButtonText = "Send Message";
+  static const successMessage = 'Message sent successfully!';
+  static const errorMessage = 'Failed to send message. Please try again.';
+  static const sendingMessage = 'Sending...';
+  static const sendButtonText = 'Send Message';
 }
 
 class ProfileText {

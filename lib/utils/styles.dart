@@ -27,11 +27,11 @@ final textFieldDecoration = InputDecoration(
   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
   enabledBorder: OutlineInputBorder(
     borderRadius: BorderRadius.circular(8),
-    borderSide: BorderSide(color: AppColors.tonalSurfaceA50),
+    borderSide: BorderSide(color: AppColors.surfaceA50),
   ),
   focusedBorder: OutlineInputBorder(
     borderRadius: BorderRadius.circular(8),
-    borderSide: BorderSide(color: AppColors.tonalSurfaceA50, width: 2),
+    borderSide: BorderSide(color: AppColors.surfaceA50, width: 2),
   ),
   errorBorder: OutlineInputBorder(
     borderRadius: BorderRadius.circular(8),
@@ -44,8 +44,8 @@ final textFieldDecoration = InputDecoration(
 );
 
 final buttonStyle = ElevatedButton.styleFrom(
-  backgroundColor: AppColors.primaryA20,
+  backgroundColor: AppColors.primaryA10,
   padding: const EdgeInsets.all(16.0),
-  disabledBackgroundColor: AppColors.tonalSurfaceA50,
+  disabledBackgroundColor: AppColors.surfaceA50,
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
 );
