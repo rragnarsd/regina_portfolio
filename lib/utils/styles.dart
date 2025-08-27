@@ -1,6 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:regina_portfolio/utils/colors.dart';
 
+class AppTextStyles {
+  static const Color primaryColor = AppColors.primaryA10;
+  static const Color secondaryColor = AppColors.surfaceA0;
+
+  static TextStyle regular({
+    double fontSize = 14,
+    Color color = primaryColor,
+    FontWeight fontWeight = FontWeight.w400,
+  }) => TextStyle(fontSize: fontSize, color: color, fontWeight: fontWeight);
+
+  static TextStyle bold({
+    double fontSize = 14,
+    Color color = primaryColor,
+    FontWeight fontWeight = FontWeight.w600,
+  }) => TextStyle(fontSize: fontSize, color: color, fontWeight: fontWeight);
+}
+
 final textFieldDecoration = InputDecoration(
   errorStyle: TextStyle(color: AppColors.error),
   alignLabelWithHint: true,

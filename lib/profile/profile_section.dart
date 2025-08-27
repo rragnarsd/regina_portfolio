@@ -5,6 +5,7 @@ import 'package:regina_portfolio/utils/colors.dart';
 import 'package:regina_portfolio/utils/constants.dart';
 import 'package:regina_portfolio/utils/enums.dart';
 import 'package:regina_portfolio/utils/extensions.dart';
+import 'package:regina_portfolio/utils/styles.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 class ProfileTab extends StatelessWidget {
@@ -51,14 +52,14 @@ class ProfileTab extends StatelessWidget {
                       AnimatedDefaultTextStyle(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeInOut,
-                        style: TextStyle(
+                        style: AppTextStyles.regular(
+                          fontSize: isDesktop ? 16 : 14,
                           color: isActive
                               ? AppColors.primaryA0
                               : AppColors.tonalSurfaceA50,
                           fontWeight: isActive
                               ? FontWeight.w600
                               : FontWeight.normal,
-                          fontSize: isDesktop ? 16 : 14,
                         ),
                         child: Text(tab.label.toUpperCase()),
                       ),
@@ -118,21 +119,15 @@ class _ProfileAbout extends StatelessWidget {
         ),
         padding: EdgeInsets.all(padding),
         child: Column(
+          spacing: 32,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               ProfileText.welcome,
-              style: TextStyle(
-                fontSize: isMobileTablet ? 20 : 24,
-                color: AppColors.primaryA10,
-                fontWeight: FontWeight.w600,
-              ),
+              style: AppTextStyles.bold(fontSize: isMobileTablet ? 20 : 24),
             ),
-            const SizedBox(height: 32),
             _ProfileSection(),
-            const SizedBox(height: 32),
             const Divider(color: AppColors.tonalSurfaceA30, thickness: 1),
-            const SizedBox(height: 32),
             _FlagSection(),
           ],
         ),
@@ -146,35 +141,35 @@ class _ProfileSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobileTablet = context.isMobileOrTablet;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           ProfileText.aboutMe,
           style: TextStyle(
-            fontSize: context.isMobileOrTablet ? 14 : 16,
+            fontSize: isMobileTablet ? 14 : 16,
             color: AppColors.primaryA10,
+            height: 1.6,
           ),
         ),
         const SizedBox(height: 32),
         Text(
           ProfileText.aboutTitle,
-          style: TextStyle(
-            fontSize: context.isMobileOrTablet ? 14 : 16,
-            color: AppColors.primaryA10,
-            fontWeight: FontWeight.w600,
-          ),
+          style: AppTextStyles.bold(fontSize: isMobileTablet ? 14 : 16),
         ),
         const SizedBox(height: 16),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: ProfileText.aboutDetails
               .map(
-                (detail) => Text(
-                  detail,
-                  style: TextStyle(
-                    fontSize: context.isMobileOrTablet ? 14 : 16,
-                    color: AppColors.primaryA10,
+                (detail) => Padding(
+                  padding: const EdgeInsets.only(bottom: 6.0),
+                  child: Text(
+                    detail,
+                    style: AppTextStyles.regular(
+                      fontSize: isMobileTablet ? 14 : 16,
+                    ),
                   ),
                 ),
               )
@@ -192,16 +187,14 @@ class _FlagSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 16,
       children: [
         Text(
           ProfileText.achievementsTitle,
-          style: TextStyle(
+          style: AppTextStyles.bold(
             fontSize: context.isMobileOrTablet ? 14 : 16,
-            color: AppColors.primaryA10,
-            fontWeight: FontWeight.w600,
           ),
         ),
-        const SizedBox(height: 16),
         Wrap(
           children: [
             ...CountryFlag.values.map((flag) {
@@ -218,6 +211,7 @@ class _FlagSection extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 18,
                       color: AppColors.primaryA10,
+                      fontFamily: 'NotoColorEmoji',
                     ),
                   ),
                 ),
@@ -270,16 +264,14 @@ class _InterestBannerState extends State<_InterestBanner> {
 
     final rowContent = Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      spacing: 16,
       children: [
         Text(
           ProfileText.interestsTitle,
-          style: TextStyle(
+          style: AppTextStyles.bold(
             fontSize: context.isMobileOrTablet ? 14 : 16,
-            color: AppColors.primaryA10,
-            fontWeight: FontWeight.w600,
           ),
         ),
-        const SizedBox(width: 16),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -289,9 +281,8 @@ class _InterestBannerState extends State<_InterestBanner> {
                   isDesktop
                       ? '${interest.label}${interest == _sortedInterests.last ? '' : '  |  '}'
                       : '${interest.label}  |  ',
-                  style: TextStyle(
+                  style: AppTextStyles.regular(
                     fontSize: context.isMobileOrTablet ? 14 : 16,
-                    color: AppColors.primaryA10,
                   ),
                 ),
               );

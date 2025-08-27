@@ -66,11 +66,7 @@ class _ContactInfo extends StatelessWidget {
           ),
           Text(
             ContactText.socialContact,
-            style: TextStyle(
-              fontSize: isMobileTablet ? 16 : 18,
-              color: AppColors.primaryA0,
-              fontWeight: FontWeight.w400,
-            ),
+            style: AppTextStyles.regular(fontSize: isMobileTablet ? 16 : 18),
             textAlign: TextAlign.center,
           ),
           SizedBox(height: 16),
@@ -236,12 +232,6 @@ class _ContactButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final contactProvider = context.watch<ContactProvider>();
 
-    final textStyle = TextStyle(
-      color: AppColors.surfaceA0,
-      fontSize: context.isMobileOrTablet ? 14 : 16,
-      fontWeight: FontWeight.w600,
-    );
-
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
@@ -252,41 +242,67 @@ class _ContactButton extends StatelessWidget {
           child: AnimatedSwitcher(
             duration: const Duration(milliseconds: 200),
             child: contactProvider.isLoading
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          color: AppColors.surfaceA0,
-                          strokeWidth: 2.4,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Text(ContactText.sendingMessage, style: textStyle),
-                    ],
-                  )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(ContactText.sendButtonText, style: textStyle),
-                      Transform.translate(
-                        offset: const Offset(12, 0),
-                        child: Transform.rotate(
-                          angle: -0.5,
-                          child: const Icon(
-                            Icons.send,
-                            color: AppColors.surfaceA0,
-                            size: 24,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                ? _ButtonItemLoading()
+                : _ButtonItem(),
           ),
         ),
       ),
+    );
+  }
+}
+
+class _ButtonItem extends StatelessWidget {
+  const _ButtonItem();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          ContactText.sendButtonText,
+          style: AppTextStyles.bold(
+            fontSize: context.isMobileOrTablet ? 14 : 16,
+            color: AppColors.surfaceA0,
+          ),
+        ),
+        Transform.translate(
+          offset: const Offset(12, 0),
+          child: Transform.rotate(
+            angle: -0.5,
+            child: const Icon(Icons.send, color: AppColors.surfaceA0, size: 24),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ButtonItemLoading extends StatelessWidget {
+  const _ButtonItemLoading();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 20,
+          height: 20,
+          child: CircularProgressIndicator(
+            color: AppColors.surfaceA0,
+            strokeWidth: 2.4,
+          ),
+        ),
+        const SizedBox(width: 16),
+        Text(
+          ContactText.sendingMessage,
+          style: AppTextStyles.bold(
+            fontSize: context.isMobileOrTablet ? 14 : 16,
+            color: AppColors.surfaceA0,
+          ),
+        ),
+      ],
     );
   }
 }

@@ -21,16 +21,35 @@ dependencies:
   google_fonts: ^6.3.0
   lottie: ^3.3.1
   flutter_svg: ^2.2.0
+  flutter_animate: ^4.5.2
+  
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+ 
 
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.4
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/play.png"
+  min_sdk_android: 21 
+  web:
+    generate: true
+    image_path: "assets/icons/play.png"
+    background_color: "#000000"
+    theme_color: "#000000"
 
 flutter:
 
   uses-material-design: true
+
+  fonts:
+    - family: NotoColorEmoji
+      fonts:
+        - asset: assets/fonts/NotoColorEmoji.ttf
 
   assets:
     - assets/

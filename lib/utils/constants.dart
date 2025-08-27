@@ -1,6 +1,6 @@
 class Links {
   static const jobsy = 'https://github.com/rragnarsd/Jobsy';
-  static const podstream = 'https://github.com/rragnarsdx/podstream';
+  static const podstream = 'https://github.com/rragnarsd/podstream';
   static const yammi = 'https://github.com/rragnarsd/yammi_yammi';
   static const enduro = 'https://github.com/rragnarsd/Enduro_app';
 
@@ -53,7 +53,7 @@ class ContactText {
 class ProfileText {
   static const welcome = '👋 Welcome';
   static const aboutMe =
-      'I’m Regina, a passionate Mobile Developer with over 3 years of experience building high-quality, cross-platform applications using Flutter. With a diverse background, a Diploma in Programming, a Bachelor’s degree in Anthropology, and a Vocational degree in Graphic Media, I bring together technical expertise, creativity, and a unique perspective on problem-solving. I thrive on bringing designs and wireframes to life, turning them into beautiful, responsive, and intuitive apps. My natural curiosity keeps me exploring new technologies and refining my craft.';
+      'I’m Regina, a Mobile Developer specializing in Flutter. With a diverse background and 3+ years of experience, I bring creativity and technical expertise to every project. I love turning designs into smooth, user-friendly apps while continuously growing as a developer.';
   static const aboutTitle = '💡 What I’m passionate about';
   static const aboutDetails = [
     '✔️ Creating seamless user experiences from UI/UX designs',

@@ -6,6 +6,7 @@ import 'package:regina_portfolio/utils/colors.dart';
 import 'package:regina_portfolio/utils/constants.dart';
 import 'package:regina_portfolio/utils/enums.dart';
 import 'package:regina_portfolio/utils/extensions.dart';
+import 'package:regina_portfolio/utils/styles.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -14,11 +15,10 @@ class ProjectTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobileTablet = context.isMobileOrTablet;
     return MaxWidthBox(
       maxWidth: 1200,
-      padding: EdgeInsets.symmetric(
-        horizontal: context.isMobileOrTablet ? 16.0 : 32.0,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: isMobileTablet ? 16.0 : 32.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -26,7 +26,7 @@ class ProjectTab extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: context.isMobileOrTablet ? 1 : 2,
+              crossAxisCount: isMobileTablet ? 1 : 2,
               crossAxisSpacing: 16,
               mainAxisSpacing: 16,
               childAspectRatio: 2.4,
@@ -91,12 +91,14 @@ class _ProjectCardState extends State<_ProjectCard>
       },
       child: InkWell(
         mouseCursor: SystemMouseCursors.click,
+        splashFactory: NoSplash.splashFactory,
         onTap: () async => await _launchUrl(url: url),
         child: ClipRRect(
           child: Stack(
             clipBehavior: Clip.hardEdge,
             children: [
               Row(
+                spacing: 16,
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -108,15 +110,12 @@ class _ProjectCardState extends State<_ProjectCard>
                       height: double.infinity,
                     ),
                   ),
-                  SizedBox(width: 16),
                   Expanded(
                     flex: 2,
                     child: Text(
                       project.name,
-                      style: TextStyle(
-                        color: AppColors.primaryA10,
+                      style: AppTextStyles.bold(
                         fontSize: context.isMobileOrTablet ? 20 : 24,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -178,7 +177,13 @@ class _ProjectCardState extends State<_ProjectCard>
   }
 
   Future<void> _launchUrl({required Uri url}) async {
-    if (!await launchUrl(url)) {
+    try {
+      if (!await launchUrl(url)) {
+        if (mounted) {
+          context.showErrorSnackBar('${ContactText.launchUrlError} $url');
+        }
+      }
+    } catch (e) {
       if (mounted) {
         context.showErrorSnackBar('${ContactText.launchUrlError} $url');
       }
@@ -198,6 +203,7 @@ class ProjectHover extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobileTablet = context.isMobileOrTablet;
     return Container(
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(4)),
       width: double.infinity,
@@ -209,11 +215,7 @@ class ProjectHover extends StatelessWidget {
         children: [
           Text(
             projectName,
-            style: TextStyle(
-              color: AppColors.primaryA10,
-              fontSize: context.isMobileOrTablet ? 14 : 16,
-              fontWeight: FontWeight.w600,
-            ),
+            style: AppTextStyles.bold(fontSize: isMobileTablet ? 14 : 16),
           ),
           Wrap(
             spacing: 8,
@@ -230,9 +232,9 @@ class ProjectHover extends StatelessWidget {
                     elevation: 2,
                     label: Text(
                       tag.label,
-                      style: TextStyle(
+                      style: AppTextStyles.bold(
+                        color: AppTextStyles.secondaryColor,
                         fontSize: context.isMobileOrTablet ? 14 : 16,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),

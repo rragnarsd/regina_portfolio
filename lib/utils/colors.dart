@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AppColors {
   //Primary
   //Best used for primary elements like buttons, links, and other primary elements.
-  static const Color primaryA0 = Color(0xFFf7f3e7);
+  static const Color primaryA0 = Color(0xFFF7F3E7);
   static const Color primaryA10 = Color(0xFFf8f4ea);
   static const Color primaryA20 = Color(0xFFf9f6ec);
   static const Color primaryA30 = Color(0xFFfaf7ef);

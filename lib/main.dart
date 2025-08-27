@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -42,12 +43,11 @@ class MyApp extends StatelessWidget {
             const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
           ],
         ),
-      ),
+      ).animate().fadeIn(duration: 400.milliseconds),
     );
   }
 }
 
-//TODO - Add launcher icon
 class PortfolioHome extends StatefulWidget {
   const PortfolioHome({super.key});
 
