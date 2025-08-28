@@ -20,6 +20,7 @@ jobs:
 
       - run: |
           flutter build web --release \
+            --base-href "/regina_portfolio/" \
             --dart-define=EMAILJS_SERVICE=${{ secrets.EMAILJS_SERVICE }} \
             --dart-define=EMAILJS_TEMPLATE=${{ secrets.EMAILJS_TEMPLATE }} \
             --dart-define=EMAILJS_USER=${{ secrets.EMAILJS_USER }}
