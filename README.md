@@ -1,5 +1,18 @@
 # ReginaPortfolio
 
+**Behind the Scenes of This Portfolio**
+
+Building this portfolio came with a few challenges and plenty of learning:
+
+- ⚡ **Making it feel alive:** Added a smooth loading spinner. Flutter web doesn’t play nicely with HTML/Bootstrap, so a little creativity was needed.
+
+- 🔒 **Keeping secrets safe:** My contact form uses EmailJS. `.env` files don’t work with GitHub Pages, so I had to find a secure workaround.
+
+- 🚀 **Automating updates:** Every push to the main branch now auto-deploys via GitHub Actions. Setting this up taught me a lot about Flutter web builds and CI/CD.
+
+Each challenge was a lesson, and now the portfolio is live, polished, and fully functional.
+
+
 ## :package: Packages
 - ResponsiveFramework - https://pub.dev/packages/responsive_framework
 - UrlLauncher - https://pub.dev/packages/url_launcher
