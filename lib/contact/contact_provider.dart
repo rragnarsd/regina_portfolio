@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:regina_portfolio/models/contact_model.dart';
 import 'package:regina_portfolio/utils/constants.dart';
+import 'package:regina_portfolio/utils/emailjs_config.dart';
 
 class ContactProvider extends ChangeNotifier {
   bool _isLoading = false;
@@ -28,9 +28,9 @@ class ContactProvider extends ChangeNotifier {
   final String userId;
 
   ContactProvider()
-    : serviceId = dotenv.env['SERVICE_ID'] ?? '',
-      templateId = dotenv.env['TEMPLATE_ID'] ?? '',
-      userId = dotenv.env['USER_ID'] ?? '' {
+    : serviceId = emailJsService,
+      templateId = emailJsTemplate,
+      userId = emailJsUser {
     if (serviceId.isEmpty || templateId.isEmpty || userId.isEmpty) {
       throw Exception('EmailJS environment variables are missing.');
     }
