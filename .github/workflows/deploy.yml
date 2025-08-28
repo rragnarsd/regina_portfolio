@@ -10,29 +10,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout repository
       - uses: actions/checkout@v3
 
-      # Step 2: Install Flutter (specify exact stable version)
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.32.8'  # Replace with the latest stable version
+          flutter-version: '3.32.8'  # or your Flutter stable version
 
-      # Step 3: Get dependencies
       - run: flutter pub get
 
-      # Step 4: Build web with EmailJS keys from secrets
       - run: |
           flutter build web --release \
             --dart-define=EMAILJS_SERVICE=${{ secrets.EMAILJS_SERVICE }} \
             --dart-define=EMAILJS_TEMPLATE=${{ secrets.EMAILJS_TEMPLATE }} \
             --dart-define=EMAILJS_USER=${{ secrets.EMAILJS_USER }}
 
-      # Step 5: Create .nojekyll to disable Jekyll processing
       - run: touch build/web/.nojekyll
 
-      # Step 6: Deploy to GitHub Pages using PAT
       - uses: peaceiris/actions-gh-pages@v3
         with:
-          personal_token: ${{ secrets.GH_PAGES_PAT }}  
+          personal_token: ${{ secrets.GH_PAGES_PAT }}
           publish_dir: ./build/web
