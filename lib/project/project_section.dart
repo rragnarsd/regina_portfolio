@@ -223,12 +223,12 @@ class ProjectHover extends StatelessWidget {
             children: projectTags
                 .map(
                   (tag) => Chip(
-                    padding: EdgeInsets.all(2),
+                    padding: const EdgeInsets.all(2),
                     backgroundColor: AppColors.primaryA10,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
                     ),
-                    side: BorderSide(color: AppColors.transparent),
+                    side: const BorderSide(color: AppColors.transparent),
                     elevation: 2,
                     label: Text(
                       tag.label,

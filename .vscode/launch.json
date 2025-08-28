@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Flutter Web",
+        "request": "launch",
+        "type": "dart",
+        "args": [
+          "--dart-define=EMAILJS_SERVICE=your_service_id",
+          "--dart-define=EMAILJS_TEMPLATE=your_template_id",
+          "--dart-define=EMAILJS_USER=your_user_id"
+        ]
+      }
+    ]
+  }
+  

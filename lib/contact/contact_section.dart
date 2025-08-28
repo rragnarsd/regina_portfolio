@@ -20,11 +20,15 @@ class ContactTab extends StatelessWidget {
     final double spacing = isMobileTablet ? 32.0 : 64.0;
 
     final children = isMobileTablet
-        ? [_ContactInfo(), SizedBox(height: spacing), _ContactForm()]
+        ? [
+            const _ContactInfo(),
+            SizedBox(height: spacing),
+            const _ContactForm(),
+          ]
         : [
-            Flexible(child: _ContactForm()),
+            const Flexible(child: _ContactForm()),
             SizedBox(width: spacing),
-            Flexible(child: _ContactInfo()),
+            const Flexible(child: _ContactInfo()),
           ];
 
     return MaxWidthBox(
@@ -69,12 +73,12 @@ class _ContactInfo extends StatelessWidget {
             style: AppTextStyles.regular(fontSize: isMobileTablet ? 16 : 18),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SocialIcon(url: Links.linkedIn, iconUrl: Images.linkedInIcon),
-              SizedBox(width: 16),
+              const SizedBox(width: 16),
               SocialIcon(url: Links.github, iconUrl: Images.githubIcon),
             ],
           ),
@@ -100,7 +104,10 @@ class SocialIcon extends StatelessWidget {
         iconUrl,
         width: 32,
         height: 32,
-        colorFilter: ColorFilter.mode(AppColors.primaryA10, BlendMode.srcIn),
+        colorFilter: const ColorFilter.mode(
+          AppColors.primaryA10,
+          BlendMode.srcIn,
+        ),
       ),
     );
   }
@@ -188,7 +195,7 @@ class _ContactFormState extends State<_ContactForm> {
               const SizedBox(height: 16),
               Text(
                 contactProvider.errorMessage!,
-                style: TextStyle(color: AppColors.error, fontSize: 14),
+                style: const TextStyle(color: AppColors.error, fontSize: 14),
               ),
             ],
           ],
@@ -242,8 +249,8 @@ class _ContactButton extends StatelessWidget {
           child: AnimatedSwitcher(
             duration: const Duration(milliseconds: 200),
             child: contactProvider.isLoading
-                ? _ButtonItemLoading()
-                : _ButtonItem(),
+                ? const _ButtonItemLoading()
+                : const _ButtonItem(),
           ),
         ),
       ),
@@ -286,7 +293,7 @@ class _ButtonItemLoading extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(
+        const SizedBox(
           width: 20,
           height: 20,
           child: CircularProgressIndicator(
@@ -329,12 +336,12 @@ class _ContactTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyle(color: AppColors.primaryA10)),
-        SizedBox(height: 12),
+        Text(label, style: const TextStyle(color: AppColors.primaryA10)),
+        const SizedBox(height: 12),
         TextFormField(
           controller: controller,
           validator: validator,
-          style: TextStyle(color: AppColors.primaryA10),
+          style: const TextStyle(color: AppColors.primaryA10),
           autofocus: true,
           cursorColor: AppColors.primaryA10,
           textInputAction: textInputAction,

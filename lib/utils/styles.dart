@@ -19,7 +19,7 @@ class AppTextStyles {
 }
 
 final textFieldDecoration = InputDecoration(
-  errorStyle: TextStyle(color: AppColors.error),
+  errorStyle: const TextStyle(color: AppColors.error),
   alignLabelWithHint: true,
   contentPadding: const EdgeInsets.symmetric(vertical: 16.0),
   prefix: const Padding(padding: EdgeInsets.only(left: 16.0)),
@@ -27,19 +27,19 @@ final textFieldDecoration = InputDecoration(
   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
   enabledBorder: OutlineInputBorder(
     borderRadius: BorderRadius.circular(8),
-    borderSide: BorderSide(color: AppColors.surfaceA50),
+    borderSide: const BorderSide(color: AppColors.surfaceA50),
   ),
   focusedBorder: OutlineInputBorder(
     borderRadius: BorderRadius.circular(8),
-    borderSide: BorderSide(color: AppColors.surfaceA50, width: 2),
+    borderSide: const BorderSide(color: AppColors.surfaceA50, width: 2),
   ),
   errorBorder: OutlineInputBorder(
     borderRadius: BorderRadius.circular(8),
-    borderSide: BorderSide(color: AppColors.error),
+    borderSide: const BorderSide(color: AppColors.error),
   ),
   focusedErrorBorder: OutlineInputBorder(
     borderRadius: BorderRadius.circular(8),
-    borderSide: BorderSide(color: AppColors.error, width: 2),
+    borderSide: const BorderSide(color: AppColors.error, width: 2),
   ),
 );
 

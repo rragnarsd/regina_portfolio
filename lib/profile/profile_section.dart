@@ -94,7 +94,7 @@ class ProfileTabView extends StatelessWidget {
     return MaxWidthBox(
       maxWidth: 1200,
       padding: EdgeInsets.symmetric(horizontal: isDesktop ? 32.0 : 0),
-      child: Column(
+      child: const Column(
         children: [_InterestBanner(), SizedBox(height: 32), _ProfileAbout()],
       ),
     );
@@ -126,9 +126,9 @@ class _ProfileAbout extends StatelessWidget {
               ProfileText.welcome,
               style: AppTextStyles.bold(fontSize: isMobileTablet ? 20 : 24),
             ),
-            _ProfileSection(),
+            const _ProfileSection(),
             const Divider(color: AppColors.tonalSurfaceA30, thickness: 1),
-            _FlagSection(),
+            const _FlagSection(),
           ],
         ),
       ),

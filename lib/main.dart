@@ -77,13 +77,13 @@ class _PortfolioHomeState extends State<PortfolioHome> {
                 const SizedBox(height: 46),
                 switch (_selectedTab) {
                   TabItem.profile => const ProfileTabView(),
-                  TabItem.projects => ProjectTab(),
+                  TabItem.projects => const ProjectTab(),
                   TabItem.contact => const ContactTab(),
                 },
               ],
             ),
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.symmetric(vertical: 24.0),
             child: Align(
               alignment: Alignment.bottomCenter,

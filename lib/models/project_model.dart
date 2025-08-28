@@ -16,7 +16,7 @@ class Project {
 }
 
 final projects = [
-  Project(
+  const Project(
     name: ProjectNames.jobsy,
     url: Links.jobsy,
     image: Images.jobsyImage,
@@ -27,19 +27,19 @@ final projects = [
       ProjectTag.uiux,
     ],
   ),
-  Project(
+  const Project(
     name: ProjectNames.podstream,
     url: Links.podstream,
     image: Images.podstreamImage,
     tags: [ProjectTag.flutter, ProjectTag.uiux],
   ),
-  Project(
+  const Project(
     name: ProjectNames.yammi,
     url: Links.yammi,
     image: Images.yammiImage,
     tags: [ProjectTag.flutterWeb, ProjectTag.uiux],
   ),
-  Project(
+  const Project(
     name: ProjectNames.enduro,
     url: Links.enduro,
     image: Images.enduroImage,
