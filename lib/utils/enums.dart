@@ -18,7 +18,17 @@ enum TabItem {
   const TabItem(this.label);
 }
 
-enum ProjectTag { flutter, flutterWeb, firebase, provider, getX, sembast, uiux }
+enum ProjectTag {
+  flutter,
+  flutterWeb,
+  firebase,
+  provider,
+  getX,
+  sembast,
+  uiux,
+  supabase,
+  bloc,
+}
 
 extension ProjectTagExtension on ProjectTag {
   String get label => switch (this) {
@@ -29,6 +39,8 @@ extension ProjectTagExtension on ProjectTag {
     ProjectTag.getX => 'GetX',
     ProjectTag.sembast => 'Sembast',
     ProjectTag.uiux => 'UI/UX',
+    ProjectTag.supabase => 'Supabase',
+    ProjectTag.bloc => 'Bloc',
   };
 }
 
