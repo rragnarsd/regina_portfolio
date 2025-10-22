@@ -17,6 +17,17 @@ class Project {
 
 final projects = [
   const Project(
+    name: ProjectNames.siply,
+    url: Links.siply,
+    image: Images.siplyImage,
+    tags: [
+      ProjectTag.flutter,
+      ProjectTag.uiux,
+      ProjectTag.firebase,
+      ProjectTag.riverpod,
+    ],
+  ),
+  const Project(
     name: ProjectNames.resido,
     url: Links.resido,
     image: Images.residoImage,

@@ -1,4 +1,5 @@
 class Links {
+  static const siply = 'https://github.com/rragnarsd/siply';
   static const resido = 'https://github.com/rragnarsd/resido';
   static const jobsy = 'https://github.com/rragnarsd/Jobsy';
   static const podstream = 'https://github.com/rragnarsd/podstream';
@@ -18,6 +19,7 @@ class Links {
 class Images {
   static const linkedInIcon = 'assets/icons/linkedin.svg';
   static const githubIcon = 'assets/icons/github.svg';
+  static const siplyImage = 'assets/images/siply.png';
   static const residoImage = 'assets/images/resido.png';
   static const jobsyImage = 'assets/images/jobsy.png';
   static const podstreamImage = 'assets/images/podstream.png';
@@ -28,6 +30,7 @@ class Images {
 }
 
 class ProjectNames {
+  static const siply = 'Siply';
   static const resido = 'Resido';
   static const jobsy = 'Jobsy';
   static const podstream = 'PodStream';

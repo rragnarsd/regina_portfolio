@@ -28,6 +28,7 @@ enum ProjectTag {
   uiux,
   supabase,
   bloc,
+  riverpod,
 }
 
 extension ProjectTagExtension on ProjectTag {
@@ -41,6 +42,7 @@ extension ProjectTagExtension on ProjectTag {
     ProjectTag.uiux => 'UI/UX',
     ProjectTag.supabase => 'Supabase',
     ProjectTag.bloc => 'Bloc',
+    ProjectTag.riverpod => 'Riverpod',
   };
 }
 
