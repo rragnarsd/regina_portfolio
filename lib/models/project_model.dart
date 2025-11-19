@@ -17,6 +17,12 @@ class Project {
 
 final projects = [
   const Project(
+    name: ProjectNames.grillhouse,
+    url: Links.grillhouse,
+    image: Images.grillhouseImage,
+    tags: [ProjectTag.flutter, ProjectTag.uiux, ProjectTag.flutterWeb],
+  ),
+  const Project(
     name: ProjectNames.siply,
     url: Links.siply,
     image: Images.siplyImage,
@@ -60,11 +66,5 @@ final projects = [
     url: Links.yammi,
     image: Images.yammiImage,
     tags: [ProjectTag.flutterWeb, ProjectTag.uiux],
-  ),
-  const Project(
-    name: ProjectNames.enduro,
-    url: Links.enduro,
-    image: Images.enduroImage,
-    tags: [ProjectTag.flutter, ProjectTag.firebase, ProjectTag.getX],
   ),
 ];

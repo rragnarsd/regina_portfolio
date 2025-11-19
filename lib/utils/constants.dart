@@ -1,10 +1,10 @@
 class Links {
+  static const grillhouse = 'https://github.com/rragnarsd/grillhouse';
   static const siply = 'https://github.com/rragnarsd/siply';
   static const resido = 'https://github.com/rragnarsd/resido';
   static const jobsy = 'https://github.com/rragnarsd/Jobsy';
   static const podstream = 'https://github.com/rragnarsd/podstream';
   static const yammi = 'https://github.com/rragnarsd/yammi_yammi';
-  static const enduro = 'https://github.com/rragnarsd/Enduro_app';
 
   static final linkedIn = Uri.parse(
     'https://www.linkedin.com/in/reginaragnarsd/',
@@ -24,7 +24,7 @@ class Images {
   static const jobsyImage = 'assets/images/jobsy.png';
   static const podstreamImage = 'assets/images/podstream.png';
   static const yammiImage = 'assets/images/yammi.png';
-  static const enduroImage = 'assets/images/enduro.png';
+  static const grillhouseImage = 'assets/images/grillhouse.png';
   static const worldImage = 'assets/images/worldmap.png';
   static const lottieJson = 'assets/json/lottie.json';
 }
@@ -35,7 +35,7 @@ class ProjectNames {
   static const jobsy = 'Jobsy';
   static const podstream = 'PodStream';
   static const yammi = 'Yammi Yammi';
-  static const enduro = 'Enduro';
+  static const grillhouse = 'Grillhouse';
 }
 
 class ContactText {
