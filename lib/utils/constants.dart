@@ -1,4 +1,5 @@
 class Links {
+  static const pawsy = 'https://github.com/rragnarsd/pawsy';
   static const grillhouse = 'https://github.com/rragnarsd/grillhouse';
   static const siply = 'https://github.com/rragnarsd/siply';
   static const resido = 'https://github.com/rragnarsd/resido';
@@ -19,6 +20,7 @@ class Links {
 class Images {
   static const linkedInIcon = 'assets/icons/linkedin.svg';
   static const githubIcon = 'assets/icons/github.svg';
+  static const pawsyImage = 'assets/images/pawsy.png';
   static const siplyImage = 'assets/images/siply.png';
   static const residoImage = 'assets/images/resido.png';
   static const jobsyImage = 'assets/images/jobsy.png';
@@ -30,6 +32,7 @@ class Images {
 }
 
 class ProjectNames {
+  static const pawsy = 'Pawsy';
   static const siply = 'Siply';
   static const resido = 'Resido';
   static const jobsy = 'Jobsy';
